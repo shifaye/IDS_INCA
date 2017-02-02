@@ -1,0 +1,105 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>icons/setting_128px_1194517_easyicon.net.png</file>
+        <file>icons/show_sidebar_vert_200px_1188159_easyicon.net.png</file>
+        <file>icons/analysis_624.0064516129px_1192677_easyicon.net.png</file>
+        <file>icons/analysis_771.55963302752px_1192676_easyicon.net.png</file>
+        <file>icons/arrows64.ico</file>
+        <file>icons/arrows_square_plus_128px_1182572_easyicon.net.ico</file>
+        <file>icons/arrows_square_plus_128px_1182572_easyicon.net.png</file>
+        <file>icons/blue.png</file>
+        <file>icons/button_check_64px_562921_easyicon.net.png</file>
+        <file>icons/button_green.png</file>
+        <file>icons/button_green_96px_543531_easyicon.net.ico</file>
+        <file>icons/button_orange.ico</file>
+        <file>icons/button_orange.png</file>
+        <file>icons/button_pause.png</file>
+        <file>icons/button_pause2.png</file>
+        <file>icons/button_pause_1.png</file>
+        <file>icons/button_play_64px_563311_easyicon.net.png</file>
+        <file>icons/button_purple.png</file>
+        <file>icons/button_purple_128px_543530_easyicon.net.ico</file>
+        <file>icons/button_red.png</file>
+        <file>icons/button_red_128px_543529_easyicon.net.ico</file>
+        <file>icons/button_start.ico</file>
+        <file>icons/button_start.png</file>
+        <file>icons/button_start2.png</file>
+        <file>icons/button_start_1.png</file>
+        <file>icons/button_stop.png</file>
+        <file>icons/button_stop2.png</file>
+        <file>icons/button_stop_1.png</file>
+        <file>icons/button_stop_64px_563318_easyicon.net.png</file>
+        <file>icons/button_trigger.png</file>
+        <file>icons/button_yellow.png</file>
+        <file>icons/copy_512px_1117588_easyicon.net.png</file>
+        <file>icons/flow_chart_512px_1117603_easyicon.net.png</file>
+        <file>icons/Google_Plus_1_23.906976744186px_554315_easyicon.net.png</file>
+        <file>icons/Graph_256px_560510_easyicon.net.png</file>
+        <file>icons/Graph_1021px_1176519_easyicon.net.png</file>
+        <file>icons/green.png</file>
+        <file>icons/green1.png</file>
+        <file>icons/igs.png</file>
+        <file>icons/Microsoft_Grapher_1024px_1175248_easyicon.net.png</file>
+        <file>icons/MINIUM_Sidebar_Pictures_24px_543792_easyicon.net.png</file>
+        <file>icons/MINIUM_Sidebar_Pictures_64px_543792_easyicon.net.png</file>
+        <file>icons/MINIUM_Sidebar_Pictures_128px_543792_easyicon.net.png</file>
+        <file>icons/monitor.ico</file>
+        <file>icons/monitor0.png</file>
+        <file>icons/Pause_Normal_Red_256px_560489_easyicon.net.png</file>
+        <file>icons/Pause_Pressed_256px_560490_easyicon.net.png</file>
+        <file>icons/plus_circle_128px_1187921_easyicon.net.ico</file>
+        <file>icons/plus_circle_128px_1187921_easyicon.net.png</file>
+        <file>icons/portrait_955.39367502726px_1199882_easyicon.net.png</file>
+        <file>icons/Record_Pressed_256px_560495_easyicon.net.png</file>
+        <file>icons/red.png</file>
+        <file>icons/red1.png</file>
+        <file>icons/search_800px_1176286_easyicon.net.png</file>
+        <file>icons/setting_128px_1194517_easyicon.net.ico</file>
+        <file>icons/start_here_256px_572110_easyicon.net.png</file>
+        <file>icons/stop_177px_1201374_easyicon.net.png</file>
+        <file>icons/switch_128px_1201391_easyicon.net.ico</file>
+        <file>icons/switch_128px_1201392_easyicon.net.ico</file>
+        <file>icons/Tunnel_Bear_1024px_1175219_easyicon.net.png</file>
+        <file>icons/yellow.png</file>
+        <file>icons/to_down.png</file>
+        <file>icons/to_left.png</file>
+        <file>icons/to_right.png</file>
+        <file>icons/to_up.png</file>
+        <file>icons/pictograms_road_signs_10_downward_gradient_roadsign_256px_543172_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_10_upward_gradient_roadsign_256px_543170_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_arrowup_arrowdown_directional_sign_256px_543163_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_bicycles_roadsign_256px_543162_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_children_crossing_sign_256px_543161_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_dangerous_bend_to_left_256px_543159_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_dangerous_bend_to_right._128px_543158_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_fence_gate_roadsign_256px_543154_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_pedestrian_crossing_sign_256px_543140_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_roadlayout_sign_9_256px_543130_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_roadlayout_sign_10_256px_543129_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_roundabout_sign_256px_543128_easyicon.net.png</file>
+        <file>icons/pictograms_road_signs_traffic_lights_ahead_sign_256px_543119_easyicon.net.png</file>
+        <file>icons/cross.png</file>
+        <file>icons/Ttype.png</file>
+        <file>icons/Little PV.png</file>
+        <file>icons/motorcycle.png</file>
+        <file>icons/Truck.png</file>
+        <file>icons/Overtaking.png</file>
+        <file>icons/Lane Change.png</file>
+        <file>icons/ACC.png</file>
+        <file>icons/human Interfere.png</file>
+        <file>icons/speed limit.png</file>
+        <file>icons/Left_turn.png</file>
+        <file>icons/Right_turn.png</file>
+        <file>icons/U-turn.png</file>
+        <file>icons/construction.png</file>
+        <file>icons/stopsign.png</file>
+        <file>icons/expressway exit.png</file>
+        <file>icons/Expressway Entrance.png</file>
+        <file>icons/tollgate.png</file>
+        <file>icons/exit_highway.png</file>
+        <file>icons/parking.png</file>
+        <file>icons/following.png</file>
+        <file>icons/AEB.png</file>
+        <file>icons/intersection.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,7 @@
+-I/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/include
+-I/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/../../atd-d2d-integration/include
+-I/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart
+-I/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/build
+-o
+/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/build/include/moc_clcmsubscriber.cpp
+/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/include/clcmsubscriber.h
