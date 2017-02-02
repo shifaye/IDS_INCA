@@ -73,7 +73,6 @@ public slots:
 
     void OnShowLogFileName(QString strFileName);
     void OnUpdateRecordStatus(RECORD_STATUS recordStatus);
-    void OnkeyEventTrigger();
 
 };
 #endif // LOGGERWINDOW_H

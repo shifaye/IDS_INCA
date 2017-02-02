@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_LoggerWindow_t {
-    QByteArrayData data[25];
-    char stringdata0[301];
+    QByteArrayData data[24];
+    char stringdata0[283];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,8 +52,7 @@ QT_MOC_LITERAL(19, 205, 17), // "OnShowLogFileName"
 QT_MOC_LITERAL(20, 223, 11), // "strFileName"
 QT_MOC_LITERAL(21, 235, 20), // "OnUpdateRecordStatus"
 QT_MOC_LITERAL(22, 256, 13), // "RECORD_STATUS"
-QT_MOC_LITERAL(23, 270, 12), // "recordStatus"
-QT_MOC_LITERAL(24, 283, 17) // "OnkeyEventTrigger"
+QT_MOC_LITERAL(23, 270, 12) // "recordStatus"
 
     },
     "LoggerWindow\0sendData\0\0status\0"
@@ -63,7 +62,7 @@ QT_MOC_LITERAL(24, 283, 17) // "OnkeyEventTrigger"
     "OnInvertSelect\0OnShowStatusMessage\0"
     "msg\0OnTableItemClicked\0x\0y\0OnShowLogFileName\0"
     "strFileName\0OnUpdateRecordStatus\0"
-    "RECORD_STATUS\0recordStatus\0OnkeyEventTrigger"
+    "RECORD_STATUS\0recordStatus"
 };
 #undef QT_MOC_LITERAL
 
@@ -73,7 +72,7 @@ static const uint qt_meta_data_LoggerWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -81,23 +80,22 @@ static const uint qt_meta_data_LoggerWindow[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   89,    2, 0x06 /* Public */,
-       4,    2,   92,    2, 0x06 /* Public */,
-       7,    1,   97,    2, 0x06 /* Public */,
-       7,    2,  100,    2, 0x06 /* Public */,
+       1,    1,   84,    2, 0x06 /* Public */,
+       4,    2,   87,    2, 0x06 /* Public */,
+       7,    1,   92,    2, 0x06 /* Public */,
+       7,    2,   95,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    0,  105,    2, 0x0a /* Public */,
-       9,    0,  106,    2, 0x0a /* Public */,
-      10,    0,  107,    2, 0x0a /* Public */,
-      11,    0,  108,    2, 0x0a /* Public */,
-      12,    0,  109,    2, 0x0a /* Public */,
-      13,    0,  110,    2, 0x0a /* Public */,
-      14,    1,  111,    2, 0x0a /* Public */,
-      16,    2,  114,    2, 0x0a /* Public */,
-      19,    1,  119,    2, 0x0a /* Public */,
-      21,    1,  122,    2, 0x0a /* Public */,
-      24,    0,  125,    2, 0x0a /* Public */,
+       8,    0,  100,    2, 0x0a /* Public */,
+       9,    0,  101,    2, 0x0a /* Public */,
+      10,    0,  102,    2, 0x0a /* Public */,
+      11,    0,  103,    2, 0x0a /* Public */,
+      12,    0,  104,    2, 0x0a /* Public */,
+      13,    0,  105,    2, 0x0a /* Public */,
+      14,    1,  106,    2, 0x0a /* Public */,
+      16,    2,  109,    2, 0x0a /* Public */,
+      19,    1,  114,    2, 0x0a /* Public */,
+      21,    1,  117,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Bool,    3,
@@ -116,7 +114,6 @@ static const uint qt_meta_data_LoggerWindow[] = {
     QMetaType::Void, QMetaType::Int, QMetaType::Int,   17,   18,
     QMetaType::Void, QMetaType::QString,   20,
     QMetaType::Void, 0x80000000 | 22,   23,
-    QMetaType::Void,
 
        0        // eod
 };
@@ -141,7 +138,6 @@ void LoggerWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 11: _t->OnTableItemClicked((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 12: _t->OnShowLogFileName((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 13: _t->OnUpdateRecordStatus((*reinterpret_cast< RECORD_STATUS(*)>(_a[1]))); break;
-        case 14: _t->OnkeyEventTrigger(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -210,13 +206,13 @@ int LoggerWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 14;
     }
     return _id;
 }

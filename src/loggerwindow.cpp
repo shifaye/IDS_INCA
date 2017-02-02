@@ -369,11 +369,6 @@ void LoggerWindow::OnInvertSelect()
     }
 }
 
-void LoggerWindow::OnkeyEventTrigger()
-{
-    //if(Qt::key)
-}
-
 void LoggerWindow::keyPressEvent(QKeyEvent *event)
 {
     double reference_timestamp = GetGlobalTimeStampInSec();
