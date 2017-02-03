@@ -3,4 +3,4 @@
 		if not found, add to the folder;
 	2. check if "trigger_information.msg" exists in folder "../../atd-d2d-integration/message/"
 		if not found, add to the folder;
-	
+	3. check if the bin file has been updated.
