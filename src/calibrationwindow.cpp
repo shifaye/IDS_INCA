@@ -27,5 +27,5 @@ void CalibrationWindow::init()
 
 void CalibrationWindow::closeEvent(QCloseEvent *event)
 {
-    emit sendData(true);
+    //emit sendData();
 }

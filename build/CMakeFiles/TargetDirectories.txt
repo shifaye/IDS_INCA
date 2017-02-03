@@ -1,2 +1,0 @@
-/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/build/CMakeFiles/app_sys_chart.dir
-/home/vov/iGS/4.0.2/atd-d2d-sysmgr/sys_chart/build/CMakeFiles/app_sys_chart_automoc.dir

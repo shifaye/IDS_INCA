@@ -144,3 +144,9 @@ void CLCMHandler::CallbackPerceptionObstacles(const lcm::ReceiveBuffer *recvBuf,
     m_qPerceptionObjs.gstMiddleLaneObstacles[0].fDistance = msg->gstMiddleLaneObstacles[0].fDistance;
     emit NewPerceptionedObjs(m_qPerceptionObjs);
 }
+
+void CLCMHandler::CallbackTrigger(const lcm::ReceiveBuffer *recvBuf, const std::string &channelName, const TRIGGER_INFORMATION *msg)
+{
+    m_qTrigger.m_trigger_type = msg->nTriggerContent;
+    emit NewTrigger(m_qTrigger);
+}

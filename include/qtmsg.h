@@ -36,6 +36,7 @@ enum DATA_FIELD_INDEX
     DFI_ADP_STATUS,             //27
     DFI_TSR,                    //28
     DFI_PERCEPTIONED_OBJ,       //29
+    DFI_TRIGGER,                //30
 
     DFI_END
 };
@@ -173,4 +174,12 @@ struct Q_VELODYNE_POINTS
     HEADER     stHeader;
 
 };Q_DECLARE_METATYPE( Q_VELODYNE_POINTS );
+
+//trigger
+struct Q_TRIGGER
+{
+    HEADER header;
+    int16_t m_trigger_type;
+};Q_DECLARE_METATYPE( Q_TRIGGER );
+
 #endif // QTMSG_H

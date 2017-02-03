@@ -6,8 +6,12 @@ using namespace std;
 
 MainWindow::MainWindow ( QWidget *parent ) :
     QMainWindow ( parent ),
-    ui ( new Ui::MainWindow )
+    ui ( new Ui::MainWindow ),
+    m_nFirstEventTimeStamp(0),
+    m_nLastEventTimeStamp(1000000)
 {
+    m_pPlayerThread = new CPlayerThread;
+
     reference_timestamp = GetGlobalTimeStampInSec();
     this->setFocusPolicy(Qt::StrongFocus);
     accumulate_ins = count_ins = 0;
@@ -38,6 +42,7 @@ MainWindow::MainWindow ( QWidget *parent ) :
     qRegisterMetaType<Q_PERCEPTION_TSR>("Q_PERCEPTION_TSR");
     qRegisterMetaType<Q_VELODYNE_POINTS>("Q_VELODYNE_POINTS");
     qRegisterMetaType<Q_PERCEPTIONED_OBJECTS>("Q_PERCEPTIONED_OBJECTS");
+    qRegisterMetaType<Q_TRIGGER>("Q_TRIGGER");
 
     m_gnPlotIndex[0] = 0;
     m_gnPlotIndex[1] = 0;
@@ -126,7 +131,24 @@ MainWindow::MainWindow ( QWidget *parent ) :
     //velodyne:
     connect( m_lcmSubscriber.m_pLcmHandler, SIGNAL(NewVelodynePoints(Q_VELODYNE_POINTS)), this, SLOT(OnNewVelodynePoints(Q_VELODYNE_POINTS)));
 
-    //
+    //trigger
+    connect( m_lcmSubscriber.m_pLcmHandler, SIGNAL(NewTrigger(Q_TRIGGER)), this, SLOT(OnNewTrigger(Q_TRIGGER)));
+
+    //initial signals for player thread...
+    connect(ui->pushButtonPlay, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonPlayClicked()));
+    connect(ui->pushButtonPause, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonPauseClicked()));
+    connect(ui->pushButtonStep, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonStepClicked()));
+    connect(ui->pushButtonGoto, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonGoToClicked()));
+    connect(ui->pushButtonSetSpeed, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonSetSpeedClicked()));
+    connect(ui->pushButtonLoadFile, SIGNAL(clicked(bool)), this, SLOT(OnPushButtonLoadFileClicked()));
+    connect(ui->horizontalSliderTime, SIGNAL(sliderMoved(int)), this, SLOT(OnTimeSliderMoved(int)));
+    connect(ui->tableWidgetLCM, SIGNAL(cellClicked(int,int)), this, SLOT(OnTableItemClicked(int, int)));
+    connect(ui->checkBoxLoop, SIGNAL(stateChanged(int)), this, SLOT(OnCheckBoxLoopStateChanged(int)));
+
+    connect(this, SIGNAL(UpdateChannelBroadCast(int,bool)), m_pPlayerThread, SLOT(OnUpdateChannelBroadCast(int,bool)));
+    connect(m_pPlayerThread, SIGNAL(ShowStatusMessage(QString)), this, SLOT(OnShowStatusMessage(QString)));
+    connect(m_pPlayerThread, SIGNAL(UpdateCurrentTimeStamp(long int)), this, SLOT(OnUpdateCurrentTimeStamp(long int)));
+    connect(m_pPlayerThread, SIGNAL(UpdateTableRow(int,CHANNEL_INFO)), this, SLOT(OnUpdateTableRow(int,CHANNEL_INFO)));
 
     m_gstDataFields[DFI_LATITUDE].strFieldName = QString ( "Lat. deg" );
 
@@ -186,6 +208,8 @@ MainWindow::MainWindow ( QWidget *parent ) :
 
     m_gstDataFields[DFI_TSR].strFieldName = "TSR";
 
+    m_gstDataFields[DFI_TRIGGER].strFieldName = "Trigger";
+
     for ( int i=0; i<DFI_END; i++ )
     {
         ui->tableWidget->item ( i, 0 )->setText ( m_gstDataFields[i].strFieldName );
@@ -205,10 +229,13 @@ MainWindow::MainWindow ( QWidget *parent ) :
     connect(sys_win,SIGNAL(showMainWindow()),this,SLOT(OnshowMainWindow()));
 
     log_win = new LoggerWindow(this);
-    connect(log_win,SIGNAL(sendData(bool)),this,SLOT(on_recv_log_win_status(bool)));
+    //connect(log_win,SIGNAL(sendData(bool)),this,SLOT(on_recv_log_win_status(bool)));
 
     cali_win = new CalibrationWindow(this);
-    connect(cali_win,SIGNAL(sendData(bool)),this,SLOT(on_recv_cali_win_status(bool)));
+    //connect(cali_win,SIGNAL(sendData(bool)),this,SLOT(on_recv_cali_win_status(bool)));
+
+    //initialize player windows in <data statics>
+
 
 }
 
@@ -219,19 +246,20 @@ void MainWindow::receiveData(bool status)
         ui->pushButton_loadsys->toggle();
 }
 
-void MainWindow::on_recv_log_win_status(bool status)
-{
-    log_window_open = false;
-    if(ui->pushButton_data_logger->isChecked())
-        ui->pushButton_data_logger->toggle();
-}
+//void MainWindow::on_recv_log_win_status()
+//{
+//    log_window_open = false;
+//    if(ui->pushButton_data_logger->isChecked())
+//        ui->pushButton_data_logger->toggle();
+//    printf("[System Echo]:logger window closed!\n");
+//}
 
-void MainWindow::on_recv_cali_win_status(bool status)
-{
-    cali_window_open = false;
-    if(ui->pushButton_calibration->isChecked())
-        ui->pushButton_calibration->toggle();
-}
+//void MainWindow::on_recv_cali_win_status()
+//{
+//    cali_window_open = false;
+//    if(ui->pushButton_calibration->isChecked())
+//        ui->pushButton_calibration->toggle();
+//}
 
 MainWindow::~MainWindow()
 {
@@ -344,6 +372,51 @@ void MainWindow::init()
     ui->pushButton_rsds->setIcon(*indicatorlamp_red);
     ui->pushButton_rsds->setIconSize(QSize(ui->pushButton_rsds->width()-10,
                                            ui->pushButton_rsds->height()-10));
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(0, new QTableWidgetItem(""));//set the header column;
+    ui->tableWidgetLCM->setColumnWidth(0, 25);//set the column width;
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(1, new QTableWidgetItem("Channel"));
+    ui->tableWidgetLCM->setColumnWidth(1, 180);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(2, new QTableWidgetItem("MsgCount"));
+    ui->tableWidgetLCM->setColumnWidth(2, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(3, new QTableWidgetItem("MsgSize(kB)"));
+    ui->tableWidgetLCM->setColumnWidth(3, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(4, new QTableWidgetItem("FQCY(Hz)"));
+    ui->tableWidgetLCM->setColumnWidth(4, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(5, new QTableWidgetItem("Period(s)"));
+    ui->tableWidgetLCM->setColumnWidth(5, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(6, new QTableWidgetItem("Stamp(s)"));
+    ui->tableWidgetLCM->setColumnWidth(6, 160);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(7, new QTableWidgetItem("MsgNumber"));
+    ui->tableWidgetLCM->setColumnWidth(7, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(8, new QTableWidgetItem("FirstStamp(s)"));
+    ui->tableWidgetLCM->setColumnWidth(8, 160);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(9, new QTableWidgetItem("LastStamp(s)"));
+    ui->tableWidgetLCM->setColumnWidth(9, 160);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(10, new QTableWidgetItem("MsgSize(MB)"));
+    ui->tableWidgetLCM->setColumnWidth(10, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(11, new QTableWidgetItem("AvgMsgSize(kB)"));
+    ui->tableWidgetLCM->setColumnWidth(11, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(12, new QTableWidgetItem("AvgFrequency"));
+    ui->tableWidgetLCM->setColumnWidth(12, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(13, new QTableWidgetItem("AvgPeriod(s)"));
+    ui->tableWidgetLCM->setColumnWidth(13, 120);
+
+    ui->tableWidgetLCM->setHorizontalHeaderItem(14, new QTableWidgetItem("TimeSpan(s)"));
+    ui->tableWidgetLCM->setColumnWidth(14, 120);
 }
 
 void MainWindow::OnShowStatusMsg ( QString msg )
@@ -653,7 +726,7 @@ void MainWindow::OnNewIpc2devVelocity(Q_IPC2DEV_VELOCITY ipc2dev_velocity)
                 ipc2dev_velocity.gbData[4][2],ipc2dev_velocity.gbData[4][3],
                 ipc2dev_velocity.gbData[4][4],ipc2dev_velocity.gbData[4][5],
                 ipc2dev_velocity.gbData[4][6],ipc2dev_velocity.gbData[4][7]);
-        ui->tableWidget->item(DFI_IPC2VCU_VELOCITY, 1)->setText(QString::asprintf("%.3f",ipc2dev_velocity ));
+        //ui->tableWidget->item(DFI_IPC2VCU_VELOCITY, 1)->setText(QString::asprintf("%.3f",ipc2dev_velocity ));
         //AppendPlotData(DFI_IPC2VCU_VELOCITY, timestamp,ipc2dev_velocity. );
 }
 
@@ -687,6 +760,22 @@ void MainWindow::OnNewVelodynePoints(Q_VELODYNE_POINTS velodyne_points)
 {
     accumulate_velodyne +=1;
     count_velodyne = accumulate_velodyne;
+}
+
+void MainWindow::OnNewTrigger(Q_TRIGGER trigger)
+{
+    if(trigger.m_trigger_type == 0)
+    {
+        ui->DebugOutput->setText("hello, no trigger");
+    }else if(trigger.m_trigger_type == 1)
+        ui->DebugOutput->setText("a curve road scenario");
+    else if(trigger.m_trigger_type == 2 )
+        ui->DebugOutput->setText("a ramp scenario");
+    else if(trigger.m_trigger_type == 3 )
+        ui->DebugOutput->setText("a cross scenario");
+    else if(trigger.m_trigger_type == 4 )
+        ui->DebugOutput->setText("a merge scenario");
+    else{}
 }
 
 void MainWindow::AppendPlotData ( int dataFieldIndex, double timestamp, double value )
@@ -1466,5 +1555,218 @@ void MainWindow::on_pushButton_detail_can_toggled(bool checked)
         ui->tableView_can_Message->hide();
     }else{
         ui->tableView_can_Message->show();
+    }
+}
+
+
+void MainWindow::SwitchWidgetsStatus(bool bLoadFile, bool bPlay, bool bPause, bool bStep, bool bSetSpeed, bool bGoto, bool bTimeSlider, bool bLoop)
+{
+    ui->pushButtonLoadFile->setEnabled(bLoadFile);
+    ui->pushButtonPlay->setEnabled(bPlay);
+    ui->pushButtonPause->setEnabled(bPause);
+    ui->pushButtonStep->setEnabled(bStep);
+    ui->pushButtonSetSpeed->setEnabled(bSetSpeed);
+    ui->pushButtonGoto->setEnabled(bGoto);
+    ui->horizontalSliderTime->setEnabled(bTimeSlider);
+    ui->checkBoxLoop->setEnabled(bLoop);
+}
+
+void MainWindow::OnPushButtonLoadFileClicked()
+{
+    SwitchWidgetsStatus(true, false, false, false, false, false, false, false);
+    ui->horizontalSliderTime->setValue(0);
+
+    //1. display dialog to select the file;
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Please Select Log File !"), ".", tr("Log Files (*.log)"));
+    if(fileName.isNull())
+    {
+       return;
+    }
+    ui->lineEditFileName->setText(fileName);
+
+    //2. try to load the file;
+    if(m_pPlayerThread->CheckFile(fileName))
+    {
+        //3. if file successfully loaded, terminate old threads and start new threads;
+        m_pPlayerThread->SetTerminateThreadsStatus(true);
+        m_threadGroup.join_all();
+
+        m_pPlayerThread->LoadFile(fileName);
+
+        //display file and channel info in the table;
+        DisplayFileAndChannelInfo();
+
+        m_pPlayerThread->SetTerminateThreadsStatus(false);
+        //start threads to read and publish events;
+        m_threadGroup.create_thread(bind(&CPlayerThread::ReadLogFileThread, m_pPlayerThread));
+        m_threadGroup.create_thread(bind(&CPlayerThread::PublishEventsThread, m_pPlayerThread));
+
+        SwitchWidgetsStatus(true, true, false, true, true, true, true, true);
+
+        m_pPlayerThread->SetReplayMode(PAUSE);
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText(QString("The file is either empty or not in log format! Please load a new file!"));
+        msgBox.exec();
+    }
+}
+
+void MainWindow::DisplayFileAndChannelInfo()
+{
+    ui->labelFirstTimeStamp->setText(QString::asprintf("%.6lf", m_pPlayerThread->m_stLogFile.nStartTimeStamp/1000000.0));
+    ui->labelLastTimeStamp->setText(QString::asprintf("%.6lf", m_pPlayerThread->m_stLogFile.nStopTimeStamp/1000000.0));
+    ui->labelCurrentTimeStamp->setText(QString::asprintf("%.6lf", m_pPlayerThread->m_stLogFile.nStartTimeStamp/1000000.0));
+    ui->doubleSpinBoxGotoTimeStamp->setMinimum(m_pPlayerThread->m_stLogFile.nStartTimeStamp/1000000.0);
+    ui->doubleSpinBoxGotoTimeStamp->setMaximum(m_pPlayerThread->m_stLogFile.nStopTimeStamp/1000000.0);
+    ui->doubleSpinBoxGotoTimeStamp->setValue(m_pPlayerThread->m_stLogFile.nStartTimeStamp/10000000.0);
+    m_nFirstEventTimeStamp = m_pPlayerThread->m_stLogFile.nStartTimeStamp;
+    m_nLastEventTimeStamp = m_pPlayerThread->m_stLogFile.nStopTimeStamp;
+    ui->doubleSpinBoxPlaySpeed->setValue(1.0);
+
+    //show the log file data info in the table;
+    ui->tableWidgetLCM->setRowCount(m_pPlayerThread->m_listChannels.size());
+    for(int i=0; i<m_pPlayerThread->m_listChannels.size(); i++)
+    {
+        ui->tableWidgetLCM->setItem(i, 0, new QTableWidgetItem(""));
+        ui->tableWidgetLCM->item(i, 0)->setTextAlignment(Qt::AlignCenter);//set item alignment;
+        ui->tableWidgetLCM->item(i, 0)->setCheckState(Qt::Checked);//set check status;
+
+        ui->tableWidgetLCM->setItem(i, 1, new QTableWidgetItem(m_pPlayerThread->m_listChannels[i].strChannelName));
+        ui->tableWidgetLCM->item(i, 1)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 2, new QTableWidgetItem(QString::asprintf("%ld", m_pPlayerThread->m_listChannels[i].nMsgCount)));
+        ui->tableWidgetLCM->item(i, 2)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 3, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].nCurrentMsgSize/1000.0)));
+        ui->tableWidgetLCM->item(i, 3)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 4, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].fFrequency)));
+        ui->tableWidgetLCM->item(i, 4)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 5, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].fPeriod)));
+        ui->tableWidgetLCM->item(i, 5)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 6, new QTableWidgetItem(QString::asprintf("%.6f", m_pPlayerThread->m_listChannels[i].nCurrentTimeStamp/1000000.0)));
+        ui->tableWidgetLCM->item(i, 6)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 7, new QTableWidgetItem(QString::asprintf("%ld", m_pPlayerThread->m_listChannels[i].nMsgNumber)));
+        ui->tableWidgetLCM->item(i, 7)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 8, new QTableWidgetItem(QString::asprintf("%.6f", m_pPlayerThread->m_listChannels[i].nFirstTimeStamp/1000000.0)));
+        ui->tableWidgetLCM->item(i, 8)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 9, new QTableWidgetItem(QString::asprintf("%.6f", m_pPlayerThread->m_listChannels[i].nLastTimeStamp/1000000.0)));
+        ui->tableWidgetLCM->item(i, 9)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 10, new QTableWidgetItem(QString::asprintf("%.6f", m_pPlayerThread->m_listChannels[i].nMsgSize/1000000.0)));
+        ui->tableWidgetLCM->item(i, 10)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 11, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].nAvgMsgSize/1000.0)));
+        ui->tableWidgetLCM->item(i, 11)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 12, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].fAvgFrequency)));
+        ui->tableWidgetLCM->item(i, 12)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 13, new QTableWidgetItem(QString::asprintf("%.3f", m_pPlayerThread->m_listChannels[i].fAvgPeriod)));
+        ui->tableWidgetLCM->item(i, 13)->setTextAlignment(Qt::AlignCenter);
+
+        ui->tableWidgetLCM->setItem(i, 14, new QTableWidgetItem(QString::asprintf("%.3f", (m_pPlayerThread->m_listChannels[i].nLastTimeStamp-m_pPlayerThread->m_listChannels[i].nFirstTimeStamp)/1000000.0)));
+        ui->tableWidgetLCM->item(i, 14)->setTextAlignment(Qt::AlignCenter);
+    }
+}
+void MainWindow::OnPushButtonPlayClicked()
+{
+    m_pPlayerThread->SetReplayMode(PLAY);
+    SwitchWidgetsStatus(false, false, true, false, false, false, false, false);
+}
+
+void MainWindow::OnPushButtonPauseClicked()
+{
+    m_pPlayerThread->SetReplayMode(PAUSE);
+    SwitchWidgetsStatus(true, false, false, true, true, true, true, true);
+}
+
+void MainWindow::OnPushButtonStepClicked()
+{
+    m_pPlayerThread->SetReplayMode(STEP);
+    SwitchWidgetsStatus(true, false, false, true, true, true, true, true);
+}
+
+void MainWindow::OnPushButtonGoToClicked()
+{
+    //get seek to time stamp;
+    long int stamp = (ui->doubleSpinBoxGotoTimeStamp->value())*1000000;
+    m_pPlayerThread->SetSeekToTimeStamp(stamp);
+}
+
+void MainWindow::OnPushButtonSetSpeedClicked()
+{
+    float speed = ui->doubleSpinBoxPlaySpeed->value();
+    m_pPlayerThread->SetReplaySpeed(speed);
+    SwitchWidgetsStatus(true, true, false, true, true, true, true, true);
+}
+
+void MainWindow::OnShowStatusMessage(QString str)
+{
+    ui->statusBar->clearMessage();
+    ui->statusBar->showMessage(str);
+}
+
+void MainWindow::OnCheckBoxLoopStateChanged(int state)
+{
+    if(state = Qt::Checked)
+    {
+        m_pPlayerThread->SetLoop(true);
+    }
+    else
+    {
+        m_pPlayerThread->SetLoop(false);
+    }
+}
+
+void MainWindow::OnTimeSliderMoved(int value)
+{
+    this->ui->doubleSpinBoxGotoTimeStamp->setValue(((value/1000000.0)*(m_nLastEventTimeStamp-m_nFirstEventTimeStamp)+m_nFirstEventTimeStamp)/1000000.0);
+}
+
+void MainWindow::OnUpdateCurrentTimeStamp(long int timestamp)
+{
+    if(!ui->horizontalSliderTime->isEnabled())
+    {
+        this->ui->labelCurrentTimeStamp->setText(QString::asprintf("%.6lf", timestamp/1000000.0));
+        ui->horizontalSliderTime->setValue((timestamp-m_nFirstEventTimeStamp)*1000000/(m_nLastEventTimeStamp-m_nFirstEventTimeStamp));
+    }
+
+}
+
+void MainWindow::OnUpdateTableRow(int index, CHANNEL_INFO channel)
+{
+    ui->tableWidgetLCM->item(index, 2)->setText(QString::asprintf("%ld", channel.nMsgCount));
+    ui->tableWidgetLCM->item(index, 3)->setText(QString::asprintf("%.3lf", channel.nCurrentMsgSize/1000.0));
+    ui->tableWidgetLCM->item(index, 4)->setText(QString::asprintf("%.3lf", channel.fFrequency));
+    ui->tableWidgetLCM->item(index, 5)->setText(QString::asprintf("%.6lf", channel.fPeriod));
+    ui->tableWidgetLCM->item(index, 6)->setText(QString::asprintf("%.6lf", channel.nCurrentTimeStamp/1000000.0));
+}
+
+void MainWindow::OnTableItemClicked(int x, int y)
+{
+    //only respond to the checkbox in the first column;
+    if(0 != y)
+    {
+        return;
+    }
+
+    Qt::CheckState checkState = ui->tableWidgetLCM->item(x, y)->checkState();//get check state of the channels;
+    if(Qt::Checked == checkState)
+    {
+        emit UpdateChannelBroadCast(x, true);
+        return;
+    }
+    else
+    {
+        emit UpdateChannelBroadCast(x, false);
+        return;
     }
 }

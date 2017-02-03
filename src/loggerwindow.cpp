@@ -9,6 +9,8 @@ LoggerWindow::LoggerWindow ( QWidget *parent ) :
     QMainWindow ( parent ),
     log_ui ( new Ui::LoggerWindow )
 {
+    m_pTriggerThread = new CTriggerThread;
+
     log_ui->setupUi ( this );
 //    this->setFixedSize(820,600);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -39,7 +41,7 @@ void LoggerWindow::init()
 
 void LoggerWindow::closeEvent(QCloseEvent *event)
 {
-    emit sendData(true);
+    //emit sendData();
 }
 
 
@@ -143,7 +145,7 @@ void LoggerWindow::InitializeSignalsAndSlots()
 
     //timer to update the table widget;
     connect(&m_qTimerUpdateTable, SIGNAL(timeout()), this, SLOT(OnTimerUpdateTable()));
-    connect(&m_qTimerUpdateTable, SIGNAL(timeout()), this, SLOT(OnkeyEventTrigger()));
+    //connect(&m_qTimerUpdateTable, SIGNAL(timeout()), this, SLOT(OnkeyEventTrigger()));
 
     //display messages from the CMessageTable, mainly used for debug;
     connect(&m_stMessageTable, SIGNAL(ShowStatusMessage(QString)), this, SLOT(OnShowStatusMessage(QString)));
@@ -369,27 +371,40 @@ void LoggerWindow::OnInvertSelect()
     }
 }
 
+/*record trigger manually*/
 void LoggerWindow::keyPressEvent(QKeyEvent *event)
 {
     double reference_timestamp = GetGlobalTimeStampInSec();
     if(event->key() == Qt::Key_Q && event->modifiers() == Qt::ControlModifier){
         if(event->isAutoRepeat()) return;
-        log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a Q Key!");
+        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a Q Key!");
+        m_pTriggerThread->OnTriggerDetected("curve_road");
     }
     if(event->key() == Qt::Key_W){
         if(event->isAutoRepeat()) return;
-        log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a W Key!");
+        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a W Key!");
+        m_pTriggerThread->OnTriggerDetected("ramp");
     }
     if(event->key() == Qt::Key_E){
         if(event->isAutoRepeat()) return;
-        log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a E Key!");
+        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a E Key!");
+        m_pTriggerThread->OnTriggerDetected("cross");
     }
     if(event->key() == Qt::Key_R){
         if(event->isAutoRepeat()) return;
-        log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a R Key!");
+        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a R Key!");
+        m_pTriggerThread->OnTriggerDetected("merge");
     }
+    /*  this part captures all key events,
+        if a trigger is detected,
+        publish a message in channel "TRIGGER_INFORMATION" */
+
 }
 
+//void LoggerWindow::OnKeyEventTrigger()
+//{
+
+//}
 void LoggerWindow::UpdateListView()
 {
 

@@ -19,6 +19,7 @@ using namespace std;
 #include "calibrationwindow.h"
 #include "ui_calibrationwindow.h"
 #include "QStandardItemModel"
+#include "cplayerthread.h"
 
 #define INDICATORLAMP_RED_PATH "../data/image/button_red.png"
 #define INDICATORLAMP_PURPLE_PATH "../data/image/button_purple.png"
@@ -99,6 +100,16 @@ private:
     QStandardItemModel* model_vcu;
     QStandardItemModel* model_vehiclepose;
 
+    CPlayerThread* m_pPlayerThread;
+    thread_group m_threadGroup;
+    long int m_nFirstEventTimeStamp;
+    long int m_nLastEventTimeStamp;
+
+    void SwitchWidgetsStatus(bool bLoadFile, bool bPlay, bool bPause, bool bStep, bool bSetSpeed, bool bGoto, bool bTimeSlider, bool bLoop);
+    void InitializeUI();
+    void InitializeSignalsAndSlots();
+    void DisplayFileAndChannelInfo();
+
 private:
     inline void AppendPlotData(int dataFieldIndex, double timestamp, double value);
     void Refresh_Load_Buttons_and_Graphs(QPushButton* button_toggled);
@@ -123,15 +134,33 @@ public slots:
     void OnNewPerceptionTsr(Q_PERCEPTION_TSR perception_tsr);
     void OnNewVelodynePoints(Q_VELODYNE_POINTS velodyne_points);
     void OnNewPerceptionObjs(Q_PERCEPTIONED_OBJECTS perception_objects);
+    void OnNewTrigger(Q_TRIGGER trigger);
     void OnshowMainWindow();
+
+    void OnPushButtonLoadFileClicked();
+    void OnPushButtonPlayClicked();
+    void OnPushButtonPauseClicked();
+    void OnPushButtonStepClicked();
+    void OnPushButtonGoToClicked();
+    void OnPushButtonSetSpeedClicked();
+    void OnTimeSliderMoved(int value);
+
+    void OnCheckBoxLoopStateChanged(int state);
+
+    void OnShowStatusMessage(QString str);
+
+    void OnUpdateCurrentTimeStamp(long int timestamp);
+    void OnUpdateTableRow(int index, CHANNEL_INFO channel);
+    void OnTableItemClicked(int x, int y);
 
 signals:
     void Send_Module_Status(int* module_status);
+    void UpdateChannelBroadCast(int index, bool broadcast);
 
 private slots:
     void receiveData(bool status);
-    void on_recv_log_win_status(bool status);
-    void on_recv_cali_win_status(bool status);
+//    void on_recv_log_win_status();
+//    void on_recv_cali_win_status();
     void on_pushButton_loadsys_clicked();
     void on_pushButton_loadgpsins_toggled(bool checked);
     void on_comboBox_chart2_x_currentIndexChanged(int index);

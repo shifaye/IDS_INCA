@@ -26,7 +26,7 @@
 #include <TRACKED_OBJECTS.hpp>              //logged tracked objects
 #include <VELODYNE_POINTS.hpp>              //logged velodyne points
 #include <VELODYNE_720POINTS.hpp>
-
+#include <TRIGGER_INFORMATION.hpp>
 #include <LOGITECH_IMAGE.hpp>               //logged logitech image
 #include "cdrawcamera.h"
 
@@ -51,6 +51,7 @@ public:
     void CallbackVelodyne(const lcm::ReceiveBuffer* recvBuf, const std::string& chanenelName, const VELODYNE64_FRAME* msg);
     void CallbackLogitechImage(const lcm::ReceiveBuffer *recvBuf, const std::string &channelName, const LOGITECH_IMAGE* msg);
     void CallbackPerceptionObstacles(const lcm::ReceiveBuffer *recvBuf, const std::string &channelName, const PERCEPTION_OBSTACLES* msg);
+    void CallbackTrigger(const lcm::ReceiveBuffer *recvBuf, const std::string &channelName, const TRIGGER_INFORMATION* msg);
     CDrawCamera m_stCameraDrawer;
 
     Q_VEHICLE_POSE m_qVehiclePose;
@@ -64,6 +65,7 @@ public:
     Q_PERCEPTION_TSR m_qPerceptionTsr;
     Q_VELODYNE_POINTS m_qVelodynePoints;
     Q_PERCEPTIONED_OBJECTS m_qPerceptionObjs;
+    Q_TRIGGER m_qTrigger;
 
 signals:
     void NewVehiclePose ( Q_VEHICLE_POSE );
@@ -77,6 +79,7 @@ signals:
     void NewPerceptionTsr(Q_PERCEPTION_TSR);
     void NewVelodynePoints(Q_VELODYNE_POINTS);
     void NewPerceptionedObjs(Q_PERCEPTIONED_OBJECTS);
+    void NewTrigger(Q_TRIGGER);
 };
 
 #endif // CLCMHANDLER_H

@@ -14,6 +14,7 @@
 #include "cmessagetable.h"
 #include "cmessagethread.h"
 #include "message.h"
+#include "ctriggerthread.h"
 
 #include <QKeyEvent>
 
@@ -47,6 +48,9 @@ private:
     CMessageTable m_stMessageTable;
     CMessageThread* m_pMessageThread;
     QTimer m_qTimerUpdateTable;//timer to update table;
+
+    CTriggerThread* m_pTriggerThread;
+
     void InitializeUi();
     void InitializeSignalsAndSlots();
     void InitializeLCM();
@@ -54,25 +58,23 @@ private:
     void UpdateListView();
 
 signals:
-    void sendData(bool status);
+    //void sendData();
     void UpdateRecordList(QString str,bool record);
     void SwitchRecord(bool);
     void SwitchRecord(bool, QString);
 
 public slots:
     void OnTimerUpdateTable();
-
     void OnStartRecord();
     void OnStopRecord();
     void OnLogFinished();
     void OnSelectAll();
     void OnInvertSelect();
-
     void OnShowStatusMessage(QString msg);
     void OnTableItemClicked(int x, int y);
-
     void OnShowLogFileName(QString strFileName);
     void OnUpdateRecordStatus(RECORD_STATUS recordStatus);
+    //void OnKeyEventTrigger();
 
 };
 #endif // LOGGERWINDOW_H

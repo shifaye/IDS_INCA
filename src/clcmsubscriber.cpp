@@ -51,6 +51,7 @@ const bool CLCMSubscriber::InitializeLCM()
     m_pLCM->subscribe ( CHANNEL_NAME_VELODYNE64, &CLCMHandler::CallbackVelodyne, m_pLcmHandler);
     m_pLCM->subscribe ( CHANNEL_NAME_PERCEPTION_OBSTACLES,&CLCMHandler::CallbackPerceptionObstacles, m_pLcmHandler);
 
+    m_pLCM->subscribe ("TRIGGER_INFORMATION",&CLCMHandler::CallbackTrigger, m_pLcmHandler);
     m_pLCM->subscribe ("LOGITECH_IMAGE",&CLCMHandler::CallbackLogitechImage, m_pLcmHandler);
 
     return true;

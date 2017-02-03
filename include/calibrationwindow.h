@@ -39,7 +39,7 @@ public:
     Ui::CalibrationWindow* cali_ui;
 
 signals:
-    void sendData(bool status);
+    //void sendData();
 public slots:
 
 private slots:
