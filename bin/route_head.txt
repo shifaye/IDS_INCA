@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>GPS Route</name>
+	<description>Route</description>
+	<Open>1</Open>
+	<Style id="normalState_TLP_Start">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon15.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+		</LabelStyle>
+	</Style>
+	<Style id="highlightState_TLP_Finish">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon7.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<color>ff0000ff</color>
+			<scale>1.1</scale>
+		</LabelStyle>
+	</Style>
+	<Style id="highlightState_TLP_Photo">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon38.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<color>ff0000ff</color>
+			<scale>1.1</scale>
+		</LabelStyle>
+	</Style>
+	<Style id="highlightState_TLP_Normal">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon23.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<color>ff0000ff</color>
+			<scale>1.1</scale>
+		</LabelStyle>
+	</Style>
+	<Style id="normalState_TLP_Normal">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon31.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+		</LabelStyle>
+	</Style>
+	<Style id="highlightState_TLP_Start">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon7.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<color>ff0000ff</color>
+			<scale>1.1</scale>
+		</LabelStyle>
+	</Style>
+	<StyleMap id="styleMap_TLP_Normal">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#normalState_TLP_Normal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#highlightState_TLP_Normal</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="roadStyle">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.5</width>
+		</LineStyle>
+	</Style>
+	<Style id="normalState_TLP_Finish">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon15.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+		</LabelStyle>
+	</Style>
+	<StyleMap id="styleMap_TLP_Start">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#normalState_TLP_Start</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#highlightState_TLP_Start</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="sn_ylw-pushpin">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.5</width>
+		</LineStyle>
+	</Style>
+	<StyleMap id="styleMap_TLP_Photo">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#normalState_TLP_Photo</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#highlightState_TLP_Photo</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="roadStyle0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.5</width>
+		</LineStyle>
+	</Style>
+	<Style id="roadStyle1">
+		<LineStyle>
+			<color>ffffff00</color>
+			<width>6</width>
+		</LineStyle>
+	</Style>
+	<Style id="sn_ylw-pushpin0">
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.5</width>
+		</LineStyle>
+	</Style>
+	<Style id="normalState_TLP_Photo">
+		<IconStyle>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon46.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+		</LabelStyle>
+	</Style>
+	<StyleMap id="roadStyle2">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#roadStyle0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#roadStyle</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="styleMap_TLP_Finish">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#normalState_TLP_Finish</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#highlightState_TLP_Finish</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>Route</name>
+		<styleUrl>#roadStyle2</styleUrl>
+		<MultiGeometry>
+			<LineString>
+				<coordinates>

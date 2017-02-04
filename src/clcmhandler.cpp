@@ -114,6 +114,7 @@ void CLCMHandler::CallbackIbeoObjects(const lcm::ReceiveBuffer *recvBuf, const s
 
 void CLCMHandler::CallbackExecuteBehaviorPlan(const lcm::ReceiveBuffer *recvBuf, const std::string &chanenelName, const EXECUTE_BEHAVIOR_PLAN *msg)
 {
+   m_qExecuteBehaviorPlan.header.nTimeStamp = msg->header.nTimeStamp;
    m_qExecuteBehaviorPlan.n_current_behavior = msg->n_current_behavior;
    emit NewExecuteBehaviorPlan(m_qExecuteBehaviorPlan);
 }
@@ -148,5 +149,7 @@ void CLCMHandler::CallbackPerceptionObstacles(const lcm::ReceiveBuffer *recvBuf,
 void CLCMHandler::CallbackTrigger(const lcm::ReceiveBuffer *recvBuf, const std::string &channelName, const TRIGGER_INFORMATION *msg)
 {
     m_qTrigger.m_trigger_type = msg->nTriggerContent;
+    m_qTrigger.header.nTimeStamp = msg->stHeader.nTimeStamp;
     emit NewTrigger(m_qTrigger);
+    std::cerr<<"a trigger is detected!"<<std::endl;
 }

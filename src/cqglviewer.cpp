@@ -158,55 +158,55 @@ void CQGLViewer::InitializeScene()
         return;
     }
 
-    //Lights;
-    GLfloat amb[] = {0.0f, 0.0f, 0.0f, 1.0f};
-    GLfloat dif[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat spe[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat pos[] = {0.0f, 0.0f, 0.0f, 1.0f};
+//    //Lights;
+//    GLfloat amb[] = {0.0f, 0.0f, 0.0f, 1.0f};
+//    GLfloat dif[] = {1.0f, 1.0f, 1.0f, 1.0f};
+//    GLfloat spe[] = {1.0f, 1.0f, 1.0f, 1.0f};
+//    GLfloat pos[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
-    int li = GL_LIGHT0;
-    for ( Lib3dsLight* l=m_p3dsFile->lights; l; l=l->next )
-    {
-        glEnable ( li );
+//    int li = GL_LIGHT0;
+//    for ( Lib3dsLight* l=m_p3dsFile->lights; l; l=l->next )
+//    {
+//        glEnable ( li );
 
-        glLightfv ( li, GL_AMBIENT, amb );
-        glLightfv ( li, GL_DIFFUSE, dif );
-        glLightfv ( li, GL_SPECULAR, spe );
+//        glLightfv ( li, GL_AMBIENT, amb );
+//        glLightfv ( li, GL_DIFFUSE, dif );
+//        glLightfv ( li, GL_SPECULAR, spe );
 
-        pos[0] = l->position[0];
-        pos[1] = l->position[1];
-        pos[2] = l->position[2];
-        glLightfv ( li, GL_POSITION, pos );
+//        pos[0] = l->position[0];
+//        pos[1] = l->position[1];
+//        pos[2] = l->position[2];
+//        glLightfv ( li, GL_POSITION, pos );
 
-        if ( !l->spot_light )
-        {
-            continue;
-        }
+//        if ( !l->spot_light )
+//        {
+//            continue;
+//        }
 
-        pos[0] = l->spot[0] - l->position[0];
-        pos[1] = l->spot[1] - l->position[1];
-        pos[2] = l->spot[2] - l->position[2];
-        glLightfv ( li, GL_SPOT_DIRECTION, pos );
-        ++li;
-    }
+//        pos[0] = l->spot[0] - l->position[0];
+//        pos[1] = l->spot[1] - l->position[1];
+//        pos[2] = l->spot[2] - l->position[2];
+//        glLightfv ( li, GL_SPOT_DIRECTION, pos );
+//        ++li;
+//    }
 
 
-    //set camera view;
-    qglviewer::Quaternion qua;
-    qua.setAxisAngle ( qglviewer::Vec ( 0.0, 0.0, 1.0 ), -PI/2.0f );
-    camera()->setOrientation ( qua );
-    camera()->setPosition ( qglviewer::Vec ( 2000.0f, 1000.0f, 10000.0f ) );
+//    //set camera view;
+//    qglviewer::Quaternion qua;
+//    qua.setAxisAngle ( qglviewer::Vec ( 0.0, 0.0, 1.0 ), -PI/2.0f );
+//    camera()->setOrientation ( qua );
+//    camera()->setPosition ( qglviewer::Vec ( 2000.0f, 1000.0f, 10000.0f ) );
 
-//    //camera
-    Lib3dsNode* c = lib3ds_file_node_by_name ( m_p3dsFile, m_p3dsCameraName, LIB3DS_CAMERA_NODE );
-    Lib3dsNode* t = lib3ds_file_node_by_name ( m_p3dsFile, m_p3dsCameraName, LIB3DS_TARGET_NODE );
-    if ( !c || !t )
-    {
-        return;
-    }
+////    //camera
+//    Lib3dsNode* c = lib3ds_file_node_by_name ( m_p3dsFile, m_p3dsCameraName, LIB3DS_CAMERA_NODE );
+//    Lib3dsNode* t = lib3ds_file_node_by_name ( m_p3dsFile, m_p3dsCameraName, LIB3DS_TARGET_NODE );
+//    if ( !c || !t )
+//    {
+//        return;
+//    }
 
-    camera()->setPosition ( qglviewer::Vec ( c->data.camera.pos ) );
-    camera()->lookAt ( qglviewer::Vec ( t->data.target.pos ) );
+//    camera()->setPosition ( qglviewer::Vec ( c->data.camera.pos ) );
+//    camera()->lookAt ( qglviewer::Vec ( t->data.target.pos ) );
 }
 
 

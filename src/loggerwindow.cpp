@@ -135,7 +135,6 @@ void LoggerWindow::InitializeLCM()
  */
 void LoggerWindow::InitializeSignalsAndSlots()
 {
-
     //log_ui related signals and slots;
     connect(log_ui->pushButtonStartRecord, SIGNAL(clicked(bool)), this, SLOT(OnStartRecord()));
     connect(log_ui->pushButtonStopRecord, SIGNAL(clicked(bool)), this, SLOT(OnStopRecord()));
@@ -328,7 +327,6 @@ void LoggerWindow::OnShowLogFileName(QString strFileName)
     this->OnShowStatusMessage(strFileName);
 }
 
-
 /**@brief slot function to update the record status;
  *
  * the record status (including bandwidth, bytestowrite, byteswritten) will be updated every 1 second;
@@ -374,37 +372,34 @@ void LoggerWindow::OnInvertSelect()
 /*record trigger manually*/
 void LoggerWindow::keyPressEvent(QKeyEvent *event)
 {
-    double reference_timestamp = GetGlobalTimeStampInSec();
+    TRIGGER_INFO manual_trigger;
+    manual_trigger.type = MANUAL;
+    manual_trigger.header.nTimeStamp = GetGlobalTimeStampInSec();
     if(event->key() == Qt::Key_Q && event->modifiers() == Qt::ControlModifier){
         if(event->isAutoRepeat()) return;
-        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a Q Key!");
-        m_pTriggerThread->OnTriggerDetected("curve_road");
+        manual_trigger.trigger_name = "curve_road";
     }
-    if(event->key() == Qt::Key_W){
+    else if(event->key() == Qt::Key_W){
         if(event->isAutoRepeat()) return;
-        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a W Key!");
-        m_pTriggerThread->OnTriggerDetected("ramp");
+        manual_trigger.trigger_name = "ramp";
     }
-    if(event->key() == Qt::Key_E){
+    else if(event->key() == Qt::Key_E){
         if(event->isAutoRepeat()) return;
-        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a E Key!");
-        m_pTriggerThread->OnTriggerDetected("cross");
+        manual_trigger.trigger_name = "cross";
     }
-    if(event->key() == Qt::Key_R){
+    else if(event->key() == Qt::Key_R){
         if(event->isAutoRepeat()) return;
-        //log_ui->lineEditExtraFileName->setText(QString::number(reference_timestamp,10,2) +": Pressed a R Key!");
-        m_pTriggerThread->OnTriggerDetected("merge");
+        manual_trigger.trigger_name = "merge";
+    }else{
+        manual_trigger.trigger_name = "NULL";
     }
+    m_pTriggerThread->OnTriggerDetected(manual_trigger);
     /*  this part captures all key events,
         if a trigger is detected,
         publish a message in channel "TRIGGER_INFORMATION" */
 
 }
 
-//void LoggerWindow::OnKeyEventTrigger()
-//{
-
-//}
 void LoggerWindow::UpdateListView()
 {
 

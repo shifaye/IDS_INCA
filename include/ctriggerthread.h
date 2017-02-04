@@ -6,6 +6,18 @@
 #include <lcm/lcm-cpp.hpp>
 #include "TRIGGER_INFORMATION.hpp"
 #include "global.hpp"
+enum TRIGGER_TYPE
+{
+    MANUAL,
+    AUTOMATIC
+};
+
+struct TRIGGER_INFO
+{
+    TRIGGER_TYPE type;
+    HEADER header;
+    QString trigger_name;
+};
 
 class CTriggerThread : public QThread
 {
@@ -22,7 +34,7 @@ public:
 signals:
 
 public slots:
-    void OnTriggerDetected(QString trigger_name);
+    void OnTriggerDetected(TRIGGER_INFO trigger);
 
 };
 #endif //ctriggerthread.h

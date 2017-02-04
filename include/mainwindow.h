@@ -20,6 +20,7 @@ using namespace std;
 #include "ui_calibrationwindow.h"
 #include "QStandardItemModel"
 #include "cplayerthread.h"
+#include "croutethread.h"
 
 #define INDICATORLAMP_RED_PATH "../data/image/button_red.png"
 #define INDICATORLAMP_PURPLE_PATH "../data/image/button_purple.png"
@@ -51,7 +52,8 @@ public:
     Ui::MainWindow *ui;
     Ui::MainWindow *viewer_ui;
     void keyPressEvent(QKeyEvent  *event);
-
+    CTriggerThread* m_pTriggerThread_auto;
+    CRouteThread* m_pRouteRecordThread;
 private:
     QPixmap *indicatorlamp_red;
     QPixmap *indicatorlamp_blue;
@@ -105,6 +107,8 @@ private:
     long int m_nFirstEventTimeStamp;
     long int m_nLastEventTimeStamp;
 
+    ROUTE_GPS gps_points;
+
     void SwitchWidgetsStatus(bool bLoadFile, bool bPlay, bool bPause, bool bStep, bool bSetSpeed, bool bGoto, bool bTimeSlider, bool bLoop);
     void InitializeUI();
     void InitializeSignalsAndSlots();
@@ -152,6 +156,7 @@ public slots:
     void OnUpdateCurrentTimeStamp(long int timestamp);
     void OnUpdateTableRow(int index, CHANNEL_INFO channel);
     void OnTableItemClicked(int x, int y);
+
 
 signals:
     void Send_Module_Status(int* module_status);
@@ -202,6 +207,7 @@ private slots:
     void on_pushButton_rsds_toggled(bool checked);
     void on_pushButton_detail_ethernet_toggled(bool checked);
     void on_pushButton_detail_can_toggled(bool checked);
+    void on_pushButton_search_log_clicked();
 };
 
 #endif // MAINWINDOW_H

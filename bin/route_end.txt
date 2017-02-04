@@ -1,0 +1,24 @@
+				</coordinates>
+			</LineString>
+		</MultiGeometry>
+	</Placemark>
+	<Folder>
+		<name>waypoints</name>
+		<open>1</open>
+		<Placemark>
+			<name>Start Point</name>
+			<styleUrl>#sn_ylw-pushpin0</styleUrl>
+			<Point>
+				<coordinates>*,*,*</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>End Point</name>
+			<styleUrl>#sn_ylw-pushpin</styleUrl>
+			<Point>
+				<coordinates>*,*,*</coordinates>
+			</Point>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

@@ -45,7 +45,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -1631,11 +1631,35 @@
          <rect>
           <x>20</x>
           <y>20</y>
-          <width>956</width>
+          <width>1061</width>
           <height>741</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
+         <item row="10" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_19">
+           <item>
+            <widget class="QPushButton" name="pushButton_search_log">
+             <property name="text">
+              <string>Search in this Log</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
          <item row="1" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -1889,7 +1913,7 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
+         <item row="12" column="0">
           <spacer name="verticalSpacer_5">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -2326,6 +2350,39 @@
             </widget>
            </item>
           </layout>
+         </item>
+         <item row="7" column="0">
+          <spacer name="horizontalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="11" column="0">
+          <widget class="QTableWidget" name="tableWidget_TriggerInLog">
+           <property name="rowCount">
+            <number>0</number>
+           </property>
+           <property name="columnCount">
+            <number>10</number>
+           </property>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+           <column/>
+          </widget>
          </item>
         </layout>
        </widget>

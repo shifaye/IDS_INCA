@@ -41,7 +41,6 @@ private:
     void closeEvent(QCloseEvent *event);
     void init();
     Ui::LoggerWindow* log_ui;
-
     QPixmap *indicatorlamp_startrecord;
     QPixmap *indicatorlamp_stoprecord;
 
